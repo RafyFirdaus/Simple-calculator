@@ -7,7 +7,9 @@ document.querySelectorAll('#calculator .btn').forEach(button => {
         console.log('Current input value:', inputField.value);
         
         if (value === '=') {
-            calculateResult(inputField);
+            if (!checkSpecialInput(inputField)) {
+                calculateResult(inputField);
+            }
         } else {
             inputField.value += value;
         }
@@ -19,7 +21,6 @@ document.getElementById('delete').addEventListener('click', function() {
     inputField.value = inputField.value.slice(0, -1);
 });
 
-// Function to calculate result
 function calculateResult(inputField) {
     try {
         const result = eval(inputField.value);
@@ -29,13 +30,23 @@ function calculateResult(inputField) {
     }
 }
 
-// Add keyboard support
+function checkSpecialInput(inputField) {
+    if (inputField.value === '0822') {
+        document.getElementById('result').textContent = 'kapan-kapan kita berdua';
+        inputField.value = '';
+        return true;
+    }
+    return false;
+}
+
 document.addEventListener('keydown', function(event) {
     const inputField = document.getElementById('input');
     if (event.key >= '0' && event.key <= '9' || ['+', '-', '*', '/'].includes(event.key)) {
         inputField.value += event.key;
     } else if (event.key === 'Enter') {
-        calculateResult(inputField);
+        if (!checkSpecialInput(inputField)) {
+            calculateResult(inputField);
+        }
     } else if (event.key === 'Backspace') {
         inputField.value = inputField.value.slice(0, -1);
     }
